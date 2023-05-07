@@ -84,9 +84,6 @@ public class GeometricTransform {
      */
     public void perspectiveBilinear(RasterImage src, RasterImage dst, double angle, double perspectiveDistortion) {
 
-        // TODO: implement the geometric transformation using bilinear interpolation
-        // NOTE: angle contains the angle in degrees, whereas Math trigonometric functions need the angle in radiant
-
         double angleRad = Math.toRadians(angle);
 
         int a, b, c, d;
@@ -95,7 +92,6 @@ public class GeometricTransform {
 
         for (int yd = 0; yd < dst.height; yd++) {
             for (int xd = 0; xd < dst.width; xd++) {
-
 
                 int pos = yd * dst.width + xd;
 
@@ -108,7 +104,6 @@ public class GeometricTransform {
                 double xs = xsStrich + src.width / 2;
                 double ys = ysStrich + src.height / 2;
 
-                //naechster Nachbar
                 int xsLeft = (int) xs;
                 int xsRight = (int) Math.ceil(xs);
                 int ysUp = (int) ys;
@@ -141,29 +136,20 @@ public class GeometricTransform {
                     d = 0xFFFFFFFF;
                 }
 
+                double r = ((a >> 16) & 0xff) * (1 - v) * (1 - h) + ((b >> 16) & 0xff) * h * (1 - v) + ((c >> 16) & 0xff)
+                        * v * (1 - h) + ((d >> 16) & 0xff) * v * h;
 
-                //red
-                int r = BiliniarInterpolate(h, v, (a >> 16) & 0xff, (b >> 16) & 0xff, (c >> 16) & 0xff, (d >> 16) & 0xff);
-                //green
-                int g = BiliniarInterpolate(h, v, (a >> 8) & 0xff, (b >> 8) & 0xff, (c >> 8) & 0xff, (d >> 8) & 0xff);
-                //blue
-                int bl = BiliniarInterpolate(h, v, a & 0xff, b & 0xff, c & 0xff, d & 0xff);
+                double gr = ((a >> 8) & 0xff) * (1 - v) * (1 - h) + ((b >> 8) & 0xff) * h * (1 - v) + ((c >> 8) & 0xff)
+                        * v * (1 - h) + ((d >> 16) & 0xff) * v * h;
 
+                double bl = (a & 0xff) * (1 - v) * (1 - h) + (b & 0xff) * h * (1 - v) + (c & 0xff)
+                        * v * (1 - h) + (d & 0xff) * v * h;
 
-                dst.argb[pos] = 0xFF000000 + ((r & 0xff) << 16) + ((g & 0xff) << 8) + (bl & 0xff);
-
+                dst.argb[pos] = (0xFF << 24) | (((int) r & 0xff) << 16) | (((int) gr & 0xff) << 8) | ((int) bl & 0xff);
 
             }
         }
-
-
     }
-
-    private int BiliniarInterpolate(double h, double v, int a, int b, int c, int d) {
-        double color = a * (1 - h) * (1 - v) + b * h * (1 - v) + c * (1 - h) * v + d * h * v;
-        return (int) color;
-    }
-
 }
 
 
