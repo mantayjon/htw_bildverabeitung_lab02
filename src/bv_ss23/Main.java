@@ -26,7 +26,7 @@ public class Main extends Application {
 		BorderPane root = (BorderPane)loadFXML("PerspectiveAppView.fxml");
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Perspective - SS2023 - <Your Name>"); // TODO: add your name(s)
+		primaryStage.setTitle("Perspective - SS2023 - Mantay"); // TODO: add your name(s)
 		primaryStage.show();
 	}
  		   	  	  		
