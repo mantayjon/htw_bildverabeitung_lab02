@@ -140,7 +140,7 @@ public class GeometricTransform {
                         * v * (1 - h) + ((d >> 16) & 0xff) * v * h;
 
                 double gr = ((a >> 8) & 0xff) * (1 - v) * (1 - h) + ((b >> 8) & 0xff) * h * (1 - v) + ((c >> 8) & 0xff)
-                        * v * (1 - h) + ((d >> 16) & 0xff) * v * h;
+                        * v * (1 - h) + ((d >> 8) & 0xff) * v * h;
 
                 double bl = (a & 0xff) * (1 - v) * (1 - h) + (b & 0xff) * h * (1 - v) + (c & 0xff)
                         * v * (1 - h) + (d & 0xff) * v * h;
